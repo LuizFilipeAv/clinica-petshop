@@ -1,0 +1,124 @@
+.about {
+  padding: clamp(1rem, 4vw, 3rem) var(--gutter);
+}
+
+.card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  max-width: calc(var(--max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: clamp(2.5rem, 2rem + 4vw, 5rem) clamp(1.25rem, 0.5rem + 4vw, 4.5rem) 0;
+  background: var(--photo-blue);
+  color: var(--white);
+  border-radius: var(--radius-l);
+  overflow: clip;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.25rem, 1rem + 1.2vw, 2rem);
+  padding-bottom: clamp(2rem, 1.5rem + 3vw, 3.5rem);
+}
+
+.title {
+  font-size: var(--step-4);
+  max-width: 12ch;
+}
+.hl { color: var(--coral-soft); }
+
+.lead {
+  max-width: 52ch;
+  color: rgb(255 255 255 / 0.86);
+  font-size: var(--step-0);
+}
+
+/* typographic facts, separated by hairlines */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  max-width: 38rem;
+  padding-top: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+}
+.fact {
+  display: flex;
+  flex-direction: column-reverse; /* dt reads first in the DOM, number shows first */
+  justify-content: flex-end;
+  gap: 0.4rem;
+  padding-inline: clamp(0.6rem, 0.2rem + 2vw, 1.75rem);
+  border-inline-start: 1px solid rgb(255 255 255 / 0.2);
+}
+.fact:first-child {
+  padding-inline-start: 0;
+  border-inline-start: 0;
+}
+.fact dd { margin: 0; }
+.num {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2rem, 1.1rem + 3.6vw, 3.75rem);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.fact dt {
+  font-size: var(--step--1);
+  line-height: 1.25;
+  color: rgb(255 255 255 / 0.78);
+}
+
+/* photo sits IN the section: same blue backdrop, flush to the card's bottom edge */
+.photo {
+  position: relative;
+  align-self: end;
+  justify-self: center;
+  width: min(100%, 460px);
+  line-height: 0;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+}
+
+.scribble {
+  display: none;
+  position: absolute;
+  pointer-events: none;
+}
+
+@media (min-width: 900px) {
+  .card {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    column-gap: clamp(1rem, 3vw, 3rem);
+    padding-bottom: 0;
+  }
+  .copy {
+    align-self: center;
+    padding-block: 0 clamp(2.5rem, 4vw, 4.5rem);
+  }
+  .photo {
+    justify-self: end;
+    width: min(100%, 640px);
+    margin-bottom: -3%; /* bleeds slightly off the bottom edge */
+  }
+  .scribble {
+    display: block;
+    top: 6%;
+    left: 2%;
+    width: 24%;
+    height: auto;
+    z-index: 1;
+  }
+}
+
+@media (min-width: 1280px) {
+  .photo { width: min(100%, 700px); }
+}
