@@ -1,0 +1,309 @@
+---
+import { Picture } from 'astro:assets';
+import Logo from './Logo.astro';
+import cat from '../assets/img/hero-cat.webp';
+import dog from '../assets/img/hero-dog.webp';
+---
+<script is:inline>
+  try { if (sessionStorage.getItem('bigode-intro')) document.documentElement.classList.add('intro-seen'); } catch (e) {}
+</script>
+
+<div class="intro" data-intro aria-hidden="true">
+  <Logo class="intro__logo" />
+</div>
+
+<section class="hero" id="top" data-hero aria-labelledby="hero-title">
+  <div class="hero__card" data-hero-card>
+    <h1 id="hero-title" class="visually-hidden">Bigode, clínica veterinária e petshop em Pinheiros, São Paulo</h1>
+
+    <div class="hero__mark" data-hero-mark>
+      <div class="hero__mark-inner" data-hero-mark-inner><Logo class="hero__logo" /></div>
+    </div>
+
+    <div class="hero__stage" data-hero-stage>
+      <div class="hero__pets">
+        <div class="hero__pet is-active" data-pet="gato">
+          <Picture src={cat} formats={['avif', 'webp']} widths={[480, 720, 1024]} sizes="(min-width: 900px) 62svh, 90vw"
+            alt="Gato branco de pelo longo e olhos azuis caminhando em direção à câmera" loading="eager" fetchpriority="high" />
+        </div>
+        <div class="hero__pet" data-pet="cachorro" aria-hidden="true">
+          <Picture src={dog} formats={['avif', 'webp']} widths={[480, 720, 1024]} sizes="(min-width: 900px) 62svh, 90vw"
+            alt="Filhote de samoieda branco com coleira coral caminhando sorridente" loading="eager" fetchpriority="low" />
+        </div>
+      </div>
+
+      <svg class="hero__marks hero__marks--r" viewBox="0 0 120 120" fill="none" data-draw aria-hidden="true">
+        <path d="M18 62 L44 50" stroke="var(--coral)" stroke-width="7" stroke-linecap="round" />
+        <path d="M24 34 L48 30" stroke="var(--coral)" stroke-width="7" stroke-linecap="round" style="--i:1" />
+        <path d="M40 10 L54 18" stroke="var(--coral)" stroke-width="7" stroke-linecap="round" style="--i:2" />
+      </svg>
+      <svg class="hero__marks hero__marks--l" viewBox="0 0 160 120" fill="none" data-draw aria-hidden="true">
+        <path d="M150 96 C 120 100, 92 88, 88 66 C 84 44, 112 40, 114 58 C 116 80, 74 92, 40 70 C 24 60, 16 44, 12 26" stroke="var(--blue)" stroke-width="5" stroke-linecap="round" style="--i:3" />
+      </svg>
+    </div>
+
+    <div class="hero__ui">
+      <a class="hero__pill" href="#servicos" data-hero-ui>
+        <span class="hero__pill-text">Clínica veterinária & petshop para <b data-pet-word>gatos</b> e quem os ama</span>
+        <span class="hero__pill-go" aria-hidden="true">
+          <svg viewBox="0 0 10 10"><path d="M5.6 0v7.6l3.5-3.5L10 5l-5 5-5-5 .9-.9 3.5 3.5V0z" fill="currentColor" /></svg>
+        </span>
+      </a>
+
+      <div class="hero__switch" role="radiogroup" aria-label="Escolha seu pet" data-hero-ui data-switch>
+        <span class="hero__switch-hl" aria-hidden="true"></span>
+        <button role="radio" aria-checked="true" data-to="gato">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 10 4 3l5 3.5h6L20 3l-1 7" /><path d="M5 10a7 7 0 1 0 14 0" /><path d="M10 13h.01M14 13h.01" /><path d="M2 15l4-.5M22 15l-4-.5" />
+          </svg>
+          Gato
+        </button>
+        <button role="radio" aria-checked="false" data-to="cachorro">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 5C4 5 2 8 3 12l3-1" /><path d="M17 5c3 0 5 3 4 7l-3-1" /><path d="M6 9.5a6 6 0 0 0 12 0V9a6 6 0 0 0-12 0z" /><path d="M10 11h.01M14 11h.01" /><path d="M11 15h2l-1 1z" />
+          </svg>
+          Cachorro
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---------- Intro overlay (first visit per session) ---------- */
+  .intro {
+    position: fixed; inset: 0; z-index: 90;
+    display: none; place-items: center;
+    background: var(--blue);
+    pointer-events: none;
+  }
+  :global(.js:not(.intro-seen)) .intro { display: grid; }
+  :global(.intro__logo) { font-size: clamp(3.5rem, 12vw, 8rem); color: var(--white) !important; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    --wall: #c6c6c6;
+    height: 100svh;
+    min-height: 560px;
+    padding: var(--gutter);
+  }
+  .hero__card {
+    position: relative;
+    height: 100%;
+    border-radius: var(--radius-l);
+    overflow: clip;
+    /* matches the photo's seamless studio backdrop (wall → horizon at 81% → floor) */
+    background:
+      radial-gradient(60% 55% at 50% 45%, #cfcfcf 0%, transparent 70%),
+      linear-gradient(to bottom, #b4b4b4 0%, #c4c4c4 45%, #cbcbcb 78%, #dcdcdc 82.5%, #e5e5e5 100%);
+    transform-origin: 50% 0;
+    will-change: transform;
+  }
+
+  .hero__mark {
+    position: absolute; left: 0; right: 0; top: clamp(5.5rem, 14svh, 9rem);
+    display: flex; justify-content: center;
+    z-index: 2;
+    pointer-events: none;
+  }
+  :global(.hero__logo) {
+    font-size: min(24vw, 31svh);
+    letter-spacing: -0.045em;
+    pointer-events: auto;
+  }
+
+  .hero__stage {
+    position: absolute; inset: 0;
+    display: flex; justify-content: center; align-items: flex-end;
+    z-index: 1;
+  }
+  .hero__pets {
+    position: relative;
+    height: 100%;
+    aspect-ratio: 2 / 3;
+    /* feather the photo edges into the card's matching backdrop */
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16%, #000 84%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 22%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, transparent 0, #000 16%, #000 84%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 22%);
+    mask-composite: intersect;
+  }
+  .hero__pet {
+    position: absolute; inset: 0;
+    opacity: 0;
+    transform: scale(1.04);
+    filter: blur(8px);
+    transition: opacity 500ms var(--ease-out), transform 900ms var(--ease-out), filter 500ms var(--ease-out);
+  }
+  .hero__pet.is-active { opacity: 1; transform: none; filter: none; }
+  .hero__pet :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; }
+
+  .hero__marks { position: absolute; pointer-events: none; }
+  .hero__marks--r { width: clamp(52px, 7svh, 84px); left: calc(50% + 15svh); top: 40%; }
+  .hero__marks--l { width: clamp(90px, 13svh, 150px); right: calc(50% + 17svh); top: 53%; }
+
+  /* ---------- UI row ---------- */
+  .hero__ui {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem;
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+  }
+  .hero__pill {
+    display: flex; align-items: center; gap: 1rem;
+    max-width: 25rem;
+    padding: 0.6rem 0.6rem 0.6rem 1.4rem;
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--ink); text-decoration: none;
+    font-size: var(--step--1); line-height: 1.35; font-weight: 500;
+    box-shadow: var(--shadow-soft);
+    transition: transform var(--dur) var(--ease-back), box-shadow var(--dur) var(--ease-out);
+  }
+  .hero__pill b { color: var(--blue); font-weight: 800; display: inline-block; }
+  .hero__pill:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+  .hero__pill-go {
+    flex: none; display: grid; place-items: center;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--coral); color: var(--white);
+    overflow: clip;
+  }
+  .hero__pill-go svg { width: 14px; transition: transform var(--dur) var(--ease-out); }
+  .hero__pill:hover .hero__pill-go svg { animation: nudge 700ms var(--ease-out); }
+  @keyframes nudge { 0% { transform: none; } 45% { transform: translateY(140%); } 46% { transform: translateY(-140%); } 100% { transform: none; } }
+
+  .hero__switch {
+    position: relative;
+    display: grid; grid-template-columns: 1fr 1fr;
+    padding: 0.35rem;
+    border-radius: 999px;
+    background: var(--white);
+    box-shadow: var(--shadow-soft);
+  }
+  .hero__switch button {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center; gap: 0.45rem;
+    min-height: 48px; padding: 0 1.15rem;
+    border-radius: 999px;
+    font-weight: 700; font-size: var(--step--1);
+    color: var(--ink-soft);
+    transition: color var(--dur) linear;
+  }
+  .hero__switch button svg { width: 20px; height: 20px; transition: transform var(--dur) var(--ease-back); }
+  .hero__switch button:hover svg { transform: rotate(-10deg) scale(1.1); }
+  .hero__switch button[aria-checked='true'] { color: var(--white); }
+  .hero__switch-hl {
+    position: absolute; top: 0.35rem; bottom: 0.35rem; left: 0.35rem;
+    width: calc(50% - 0.35rem);
+    border-radius: 999px;
+    background: var(--blue);
+    transition: transform 450ms var(--ease-back), background-color var(--dur) linear;
+  }
+  .hero__switch[data-active='cachorro'] .hero__switch-hl { transform: translateX(100%); background: var(--coral); }
+
+  @media (max-width: 700px) {
+    .hero__mark { top: 6.5rem; }
+    :global(.hero__logo) { font-size: 25vw; }
+    .hero__pets { height: 80%; }
+    .hero__marks--r { left: calc(50% + 11vw); top: 47%; width: 44px; }
+    .hero__marks--l { right: calc(50% + 14vw); top: 60%; width: 80px; }
+    .hero__ui { flex-direction: column; align-items: stretch; }
+    .hero__pill { max-width: none; }
+    .hero__switch { order: -1; align-self: center; }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, reduced, lenis } from '../scripts/motion';
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]')!;
+  const card = hero.querySelector<HTMLElement>('[data-hero-card]')!;
+  const mark = hero.querySelector<HTMLElement>('[data-hero-mark-inner]')!;
+  const stage = hero.querySelector<HTMLElement>('[data-hero-stage]')!;
+  const sw = hero.querySelector<HTMLElement>('[data-switch]')!;
+  const word = hero.querySelector<HTMLElement>('[data-pet-word]')!;
+  const pets = hero.querySelectorAll<HTMLElement>('[data-pet]');
+  const marks = hero.querySelectorAll<SVGElement>('.hero__marks');
+  const intro = document.querySelector<HTMLElement>('[data-intro]')!;
+  const ui = hero.querySelectorAll<HTMLElement>('[data-hero-ui]');
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* ---------- Pet switch ---------- */
+  const words: Record<string, string> = { gato: 'gatos', cachorro: 'cães' };
+  const select = (to: string) => {
+    if (sw.dataset.active === to) return;
+    sw.dataset.active = to;
+    sw.querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.to === to)));
+    pets.forEach((p) => {
+      const on = p.dataset.pet === to;
+      p.classList.toggle('is-active', on);
+      p.setAttribute('aria-hidden', String(!on));
+    });
+    // word swap + redraw the coral marks
+    if (!reduced) {
+      gsap.fromTo(word, { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.45, ease: 'back.out(2)' });
+      marks.forEach((m) => { m.classList.remove('is-in'); requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('is-in'))); });
+    }
+    word.textContent = words[to];
+  };
+  sw.dataset.active = 'gato';
+  sw.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-to]');
+    if (b) select(b.dataset.to!);
+  });
+  sw.addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+    const next = sw.dataset.active === 'gato' ? 'cachorro' : 'gato';
+    select(next);
+    sw.querySelector<HTMLButtonElement>(`[data-to="${next}"]`)!.focus();
+  });
+
+  /* ---------- Entrance ---------- */
+  const firstVisit = !document.documentElement.classList.contains('intro-seen');
+  if (reduced) {
+    intro.remove();
+  } else {
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+    gsap.set(mark, { yPercent: 100, clipPath: 'inset(0 0 100% 0)' });
+    gsap.set(stage, { yPercent: 6, scale: 1.04, opacity: 0 });
+    gsap.set(ui, { y: 30, opacity: 0 });
+
+    if (firstVisit) {
+      try { sessionStorage.setItem('bigode-intro', '1'); } catch {}
+      lenis?.stop();
+      const logo = intro.querySelector('.logo')!;
+      tl.from(logo, { yPercent: 40, opacity: 0, duration: 0.6 })
+        .from(logo.querySelectorAll('.logo__ear'), { scale: 0, transformOrigin: '50% 100%', duration: 0.5, ease: 'back.out(3)', stagger: 0.06 }, '<0.15')
+        .to(intro, { clipPath: 'inset(0 0 100% 0)', duration: 0.8, ease: 'expo.inOut' }, '+=0.15')
+        .add(() => { intro.remove(); lenis?.start(); });
+    } else {
+      intro.remove();
+    }
+    tl.to(stage, { yPercent: 0, scale: 1, opacity: 1, duration: 1.2 }, firstVisit ? '-=0.45' : 0)
+      .to(mark, { yPercent: 0, clipPath: 'inset(0 0 -20% 0)', duration: 1 }, '<0.1')
+      .to(ui, { y: 0, opacity: 1, duration: 0.8, stagger: 0.08 }, '<0.3')
+      .add(() => marks.forEach((m) => m.classList.add('is-in')), '<');
+  }
+
+  /* ---------- Scroll: card shrinks, wordmark lifts away ---------- */
+  if (!reduced) {
+    const st = { trigger: hero, start: 'top top', end: 'bottom top', scrub: true };
+    gsap.to(card, { scale: 0.9, borderRadius: 64, ease: 'none', scrollTrigger: st });
+    gsap.to(hero.querySelector('[data-hero-mark]'), { yPercent: -60, opacity: 0, ease: 'none', scrollTrigger: { ...st, end: '60% top' } });
+    gsap.to(hero.querySelector('.hero__pets'), { yPercent: 10, ease: 'none', scrollTrigger: st });
+    ScrollTrigger.refresh();
+  }
+
+  /* ---------- Pointer: subtle depth ---------- */
+  if (!reduced && fine) {
+    const petsEl = hero.querySelector<HTMLElement>('.hero__pets')!;
+    const px = gsap.quickTo(petsEl, 'x', { duration: 1, ease: 'power3.out' });
+    const mx = gsap.quickTo(mark, 'x', { duration: 1.2, ease: 'power3.out' });
+    const my = gsap.quickTo(mark, 'y', { duration: 1.2, ease: 'power3.out' });
+    hero.addEventListener('pointermove', (e) => {
+      const nx = e.clientX / innerWidth - 0.5;
+      const ny = e.clientY / innerHeight - 0.5;
+      px(nx * 18);
+      mx(nx * -26); my(ny * -12);
+    }, { passive: true });
+    hero.addEventListener('pointerleave', () => { px(0); mx(0); my(0); });
+  }
+</script>
