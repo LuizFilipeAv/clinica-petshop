@@ -23,11 +23,11 @@ import dog from '../assets/img/hero-dog.webp';
     <div class="hero__stage" data-hero-stage>
       <div class="hero__pets">
         <div class="hero__pet is-active" data-pet="gato">
-          <Picture src={cat} formats={['avif', 'webp']} widths={[480, 720, 1024]} sizes="(min-width: 900px) 62svh, 90vw"
+          <Picture src={cat} formats={['avif', 'webp']} fallbackFormat="webp" widths={[480, 720, 1024]} sizes="(min-width: 900px) 62svh, 90vw"
             alt="Gato branco de pelo longo e olhos azuis caminhando em direção à câmera" loading="eager" fetchpriority="high" />
         </div>
         <div class="hero__pet" data-pet="cachorro" aria-hidden="true">
-          <Picture src={dog} formats={['avif', 'webp']} widths={[480, 720, 1024]} sizes="(min-width: 900px) 62svh, 90vw"
+          <Picture src={dog} formats={['avif', 'webp']} fallbackFormat="webp" widths={[480, 720, 1024]} sizes="(min-width: 900px) 62svh, 90vw"
             alt="Filhote de samoieda branco com coleira coral caminhando sorridente" loading="eager" fetchpriority="low" />
         </div>
       </div>
@@ -138,7 +138,7 @@ import dog from '../assets/img/hero-dog.webp';
   .hero__pet :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; }
 
   .hero__marks { position: absolute; pointer-events: none; }
-  .hero__marks--r { width: clamp(52px, 7svh, 84px); left: calc(50% + 15svh); top: 40%; }
+  .hero__marks--r { width: clamp(52px, 7svh, 84px); left: calc(50% + 12svh); top: 47%; }
   .hero__marks--l { width: clamp(90px, 13svh, 150px); right: calc(50% + 17svh); top: 53%; }
 
   /* ---------- UI row ---------- */

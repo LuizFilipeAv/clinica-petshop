@@ -18,7 +18,7 @@ import space from '../assets/img/clinic-space.webp';
       <div class="inner" data-inner>
         <Picture
           src={space}
-          formats={['avif', 'webp']}
+          formats={['avif', 'webp']} fallbackFormat="webp"
           widths={[640, 1000, 1400, 1672]}
           sizes="(min-width: 900px) calc(100vw - 4rem), 100vw"
           alt="Recepção clara da clínica Bigode, com poltronas azuis e coral e um golden retriever deitado no chão"

@@ -98,6 +98,7 @@ const links = [
     clip-path: circle(0% at calc(100% - 3rem) 3rem);
     transition: clip-path 650ms var(--ease-in-out);
   }
+  .menu[hidden] { display: none; }
   .menu.is-open { clip-path: circle(150% at calc(100% - 3rem) 3rem); }
   .menu ul { list-style: none; padding: 0; display: grid; gap: 0.3rem; }
   .menu a { font-size: clamp(3rem, 14vw, 5rem); text-decoration: none; display: inline-block; }
@@ -126,7 +127,7 @@ const links = [
   // solid bar + logo once the hero wordmark scrolls away
   if (hero) {
     new IntersectionObserver(([e]) => hdr.classList.toggle('is-solid', !e.isIntersecting), {
-      rootMargin: '-35% 0px 0px 0px', threshold: 0,
+      rootMargin: '-90px 0px 0px 0px', threshold: 0,
     }).observe(hero.querySelector('[data-hero-mark]') ?? hero);
   } else hdr.classList.add('is-solid');
 
