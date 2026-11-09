@@ -1,0 +1,295 @@
+---
+import { Picture } from 'astro:assets';
+import food from '../assets/img/shop-food.webp';
+import toy from '../assets/img/shop-toy.webp';
+import bed from '../assets/img/shop-bed.webp';
+
+/* --bg is sampled from each photo's studio backdrop so the image melts into the card. */
+const products = [
+  { name: 'Ração natural 3kg', price: 189, img: food, bg: '#cfcfd1', alt: 'Embalagem de ração natural em papel kraft sobre fundo cinza claro' },
+  { name: 'Osso de borracha', price: 39, img: toy, bg: '#cccccc', alt: 'Osso de borracha coral com textura de bolinhas e frisos' },
+  { name: 'Caminha nuvem', price: 249, img: bed, bg: '#cfcfcf', alt: 'Caminha redonda de pelúcia azul, macia e fofa' },
+  { name: 'Ração filhote 1kg', price: 79, img: food, bg: '#cfcfd1', alt: 'Pacote de ração para filhotes em papel kraft' },
+  { name: 'Caminha nuvem P', price: 169, img: bed, bg: '#cfcfcf', alt: 'Caminha redonda azul de pelúcia, tamanho pequeno' },
+];
+const brl = (n: number) => `R$ ${n}`;
+const arrow = 'M0 5.6h7.6L4.1 9.1 5 10l5-5-5-5-.9.9 3.5 3.5H0z';
+---
+<section id="petshop" class="shop" aria-labelledby="shop-title">
+  <div class="container shop__head">
+    <h2 id="shop-title" class="display shop__title" data-split>Petshop: o que eles amam, a gente tem</h2>
+    <div class="shop__nav" data-reveal="fade">
+      <button type="button" class="shop__arrow shop__arrow--prev" data-prev aria-label="Ver produtos anteriores">
+        <svg viewBox="0 0 10 10" aria-hidden="true"><path d={arrow} fill="currentColor" /></svg>
+      </button>
+      <button type="button" class="shop__arrow" data-next aria-label="Ver próximos produtos">
+        <svg viewBox="0 0 10 10" aria-hidden="true"><path d={arrow} fill="currentColor" /></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="shop__track" data-track data-cursor="Arraste" data-reveal="up" role="region" aria-label="Produtos do petshop" tabindex="0">
+    <ul class="shop__list">
+      {products.map((p) => (
+        <li class="card" data-card>
+          <div class="card__media" style={`--bg:${p.bg}`}>
+            <Picture
+              src={p.img}
+              formats={['avif', 'webp']} fallbackFormat="webp"
+              widths={[330, 660, 990]}
+              sizes="(min-width: 600px) 330px, 72vw"
+              alt={p.alt}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="card__info">
+            <div class="card__text">
+              <h3 class="card__name">{p.name}</h3>
+              <p class="card__price">{brl(p.price)}</p>
+            </div>
+            <button type="button" class="card__add" data-add data-name={p.name} aria-label={`Adicionar ${p.name} à sacola`}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path class="card__plus" d="M12 5v14M5 12h14" />
+                <path class="card__check" d="M5 12.5l4.5 4.5L19 7.5" pathLength="1" />
+              </svg>
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <p class="visually-hidden" role="status" aria-live="polite" data-status></p>
+</section>
+
+<style>
+  .shop { background: var(--paper); padding-block: var(--section); overflow-x: clip; }
+
+  .shop__head {
+    display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+    gap: 1.5rem 2rem; margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+  .shop__title { font-size: var(--step-3); color: var(--blue); max-width: 15ch; }
+
+  .shop__nav { display: flex; gap: 0.75rem; }
+  .shop__arrow {
+    display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+    background: var(--blue); color: var(--white);
+    transition: transform var(--dur) var(--ease-back), background-color var(--dur-fast) linear, opacity var(--dur-fast) linear;
+  }
+  .shop__arrow svg { width: 18px; height: 18px; }
+  .shop__arrow--prev svg { transform: rotate(180deg); }
+  .shop__arrow:hover { background: var(--blue-deep); transform: scale(1.08); }
+  .shop__arrow:active { transform: scale(0.92); }
+  .shop__arrow[aria-disabled='true'] { opacity: 0.35; cursor: default; transform: none; background: var(--blue); }
+
+  /* Native horizontal scroll + snap; scrollbar hidden visually, the region stays focusable. */
+  .shop__track {
+    --pad: max(var(--gutter), calc((100% - var(--max)) / 2));
+    position: relative;
+    overflow-x: auto; overflow-y: hidden;
+    padding: 0.5rem var(--pad) 3rem;
+    scroll-padding-inline: var(--pad);
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .shop__track::-webkit-scrollbar { display: none; }
+  .shop__track.is-dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+  @media (hover: hover) and (pointer: fine) {
+    .shop__track { cursor: grab; }
+  }
+
+  .shop__list {
+    display: flex; align-items: flex-start; gap: clamp(1rem, 2vw, 1.75rem);
+    width: max-content; padding: 0; list-style: none;
+  }
+
+  .card {
+    flex: 0 0 clamp(240px, 72vw, 330px);
+    scroll-snap-align: start;
+    transition: opacity var(--dur) linear;
+  }
+  .card:nth-child(even) { margin-top: clamp(1.25rem, 3vw, 2.75rem); }
+  .card.is-peek { opacity: 0.5; }
+
+  .card__media {
+    aspect-ratio: 1;
+    background: var(--bg);
+    border-radius: var(--radius-m);
+    overflow: clip;
+    display: grid; place-items: center;
+  }
+  .card__media :global(picture) { display: block; width: 100%; }
+  .card__media :global(img) {
+    width: 100%; height: auto; max-height: 100%; object-fit: contain;
+    pointer-events: none; -webkit-user-drag: none; user-select: none;
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+  .card:hover .card__media :global(img) { transform: scale(1.05); }
+
+  .card__info {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    margin-top: 1rem; padding-inline: 0.25rem;
+  }
+  .card__name { font-family: var(--font-body); font-size: var(--step-1); font-weight: 800; line-height: 1.15; color: var(--ink); }
+  .card__price { margin-top: 0.2rem; font-weight: 600; color: var(--ink-soft); }
+
+  .card__add {
+    flex: none; position: relative; display: grid; place-items: center;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--coral); color: var(--ink);
+    transition: transform var(--dur) var(--ease-back), background-color var(--dur-fast) linear;
+  }
+  .card__add svg { width: 24px; height: 24px; overflow: visible; }
+  .card__add:hover { background: var(--coral-deep); transform: scale(1.08); }
+  .card__add:active { transform: scale(0.9); }
+  .card__add.is-added { transform: scale(1.18); }
+
+  .card__plus {
+    transform-box: fill-box; transform-origin: center;
+    transition: transform var(--dur) var(--ease-back), opacity var(--dur-fast) linear;
+  }
+  .card__check {
+    stroke-dasharray: 1; stroke-dashoffset: 1;
+    transition: stroke-dashoffset var(--dur) var(--ease-out);
+  }
+  .card__add.is-added .card__plus { transform: rotate(90deg) scale(0.3); opacity: 0; }
+  .card__add.is-added .card__check { stroke-dashoffset: 0; transition-delay: 90ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover .card__media :global(img) { transform: none; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('#petshop');
+  if (root) init(root);
+
+  function init(root: HTMLElement) {
+    const track = root.querySelector<HTMLElement>('[data-track]')!;
+    const cards = [...track.querySelectorAll<HTMLElement>('[data-card]')];
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
+    const status = root.querySelector<HTMLElement>('[data-status]')!;
+    const rm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const behavior = (): ScrollBehavior => (rm.matches ? 'auto' : 'smooth');
+
+    /* ---------- arrows + edge state ---------- */
+    const maxScroll = () => track.scrollWidth - track.clientWidth;
+    const step = () => (cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth * 0.8);
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      prev.setAttribute('aria-disabled', String(track.scrollLeft <= 2));
+      next.setAttribute('aria-disabled', String(track.scrollLeft >= maxScroll() - 2));
+      const tr = track.getBoundingClientRect();
+      cards.forEach((c) => {
+        const r = c.getBoundingClientRect();
+        c.classList.toggle('is-peek', r.right - tr.right > 4 && r.left < tr.right);
+      });
+    };
+    const queue = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    track.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue, { passive: true });
+    update();
+
+    const go = (dir: 1 | -1) => (e: Event) => {
+      if ((e.currentTarget as HTMLElement).getAttribute('aria-disabled') === 'true') return;
+      track.scrollBy({ left: dir * step(), behavior: behavior() });
+    };
+    prev.addEventListener('click', go(-1));
+    next.addEventListener('click', go(1));
+
+    /* ---------- mouse drag with inertia (touch uses native scroll) ---------- */
+    let down = false, active = false, startX = 0, startScroll = 0, lastX = 0, lastT = 0, vel = 0;
+    let raf = 0, releaseTimer = 0;
+
+    const release = () => { clearTimeout(releaseTimer); track.classList.remove('is-dragging'); };
+
+    const settle = () => {
+      raf = 0;
+      const pad = cards[0].offsetLeft;
+      const x = track.scrollLeft;
+      let best = cards[0];
+      let bestD = Infinity;
+      cards.forEach((c) => {
+        const d = Math.abs(c.offsetLeft - pad - x);
+        if (d < bestD) { bestD = d; best = c; }
+      });
+      track.scrollTo({ left: best.offsetLeft - pad, behavior: behavior() });
+      if (rm.matches) return release();
+      // keep snap off until the glide to the card ends, so it doesn't jump
+      track.addEventListener('scrollend', release, { once: true });
+      releaseTimer = window.setTimeout(release, 700);
+    };
+
+    const glide = () => {
+      let prevT = performance.now();
+      const tick = (t: number) => {
+        const dt = Math.min(t - prevT, 32);
+        prevT = t;
+        track.scrollLeft += vel * dt;
+        vel *= Math.pow(0.94, dt / 16);
+        const x = track.scrollLeft;
+        if (Math.abs(vel) < 0.04 || x <= 0 || x >= maxScroll() - 1) return settle(); // stops the rAF
+        raf = requestAnimationFrame(tick);
+      };
+      if (Math.abs(vel) < 0.04) settle();
+      else raf = requestAnimationFrame(tick);
+    };
+
+    const onMove = (e: PointerEvent) => {
+      const dx = e.clientX - startX;
+      if (!active) {
+        if (Math.abs(dx) < 4) return;
+        active = true;
+        track.classList.add('is-dragging');
+      }
+      track.scrollLeft = startScroll - dx;
+      const dt = e.timeStamp - lastT;
+      if (dt > 0) vel = vel * 0.6 + ((lastX - e.clientX) / dt) * 0.4;
+      lastX = e.clientX;
+      lastT = e.timeStamp;
+    };
+
+    const onUp = (e: PointerEvent) => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+      down = false;
+      if (!active) return;
+      active = false;
+      if (rm.matches || e.timeStamp - lastT > 80) vel = 0;
+      glide();
+    };
+
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0 || down) return;
+      if ((e.target as Element).closest('button')) return;
+      cancelAnimationFrame(raf);
+      clearTimeout(releaseTimer);
+      down = true; active = false; vel = 0;
+      startX = lastX = e.clientX;
+      startScroll = track.scrollLeft;
+      lastT = e.timeStamp;
+      window.addEventListener('pointermove', onMove, { passive: true });
+      window.addEventListener('pointerup', onUp);
+      window.addEventListener('pointercancel', onUp);
+    });
+
+    /* ---------- add-to-bag feedback (visual only) ---------- */
+    root.querySelectorAll<HTMLButtonElement>('[data-add]').forEach((btn) => {
+      let t = 0;
+      btn.addEventListener('click', () => {
+        btn.classList.add('is-added');
+        status.textContent = '';
+        requestAnimationFrame(() => { status.textContent = `${btn.dataset.name} adicionado à sacola`; });
+        clearTimeout(t);
+        t = window.setTimeout(() => btn.classList.remove('is-added'), 1200);
+      });
+    });
+  }
+</script>
