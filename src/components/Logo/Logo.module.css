@@ -1,0 +1,43 @@
+.logo {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-logo);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--blue);
+  white-space: nowrap;
+}
+.o {
+  position: relative;
+  display: inline-block;
+  width: 0.66em;
+  height: 0.5em;
+  margin-inline: 0.01em 0.02em;
+}
+.o svg {
+  position: absolute;
+  left: 50%;
+  bottom: -0.11em;
+  width: 0.86em;
+  height: 0.86em;
+  translate: -50% 0;
+  overflow: visible;
+}
+.ear { transform-box: fill-box; transition: transform 380ms var(--ease-back); }
+.earL { transform-origin: 30% 100%; }
+.earR { transform-origin: 70% 100%; }
+.wl, .wr { transform-box: fill-box; transition: transform 300ms var(--ease-back); }
+.wl { transform-origin: 100% 50%; }
+.wr { transform-origin: 0% 50%; }
+.eyes { transform-box: fill-box; transform-origin: 50% 50%; animation: blink 5.5s infinite; }
+
+:global(a:hover) > .logo .earL, .logo:hover .earL { transform: rotate(-12deg); }
+:global(a:hover) > .logo .earR, .logo:hover .earR { transform: rotate(12deg); }
+:global(a:hover) > .logo .wl, .logo:hover .wl { transform: rotate(8deg) scaleX(1.1); }
+:global(a:hover) > .logo .wr, .logo:hover .wr { transform: rotate(-8deg) scaleX(1.1); }
+
+@keyframes blink {
+  0%, 94%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.1); }
+}
