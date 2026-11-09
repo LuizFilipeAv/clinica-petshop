@@ -42,7 +42,7 @@ import vet from '../assets/img/about-vet.webp';
     <div class="photo" data-reveal="up">
       <Picture
         src={vet}
-        formats={['avif', 'webp']}
+        formats={['avif', 'webp']} fallbackFormat="webp"
         widths={[480, 800, 1024]}
         sizes="(min-width: 900px) 48vw, 90vw"
         alt="Veterinária sorrindo com um buldogue francês nos braços"
@@ -82,7 +82,7 @@ import vet from '../assets/img/about-vet.webp';
     max-width: calc(var(--max) + 2 * var(--gutter));
     margin-inline: auto;
     padding: clamp(2.5rem, 2rem + 4vw, 5rem) clamp(1.25rem, 0.5rem + 4vw, 4.5rem) 0;
-    background: var(--blue);
+    background: var(--photo-blue);
     color: var(--white);
     border-radius: var(--radius-l);
     overflow: clip;
@@ -185,9 +185,9 @@ import vet from '../assets/img/about-vet.webp';
     }
     .scribble {
       display: block;
-      top: 14%;
-      left: -14%;
-      width: 34%;
+      top: 6%;
+      left: 2%;
+      width: 24%;
       height: auto;
       z-index: 1;
     }

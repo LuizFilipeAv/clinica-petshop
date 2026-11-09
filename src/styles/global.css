@@ -1,6 +1,3 @@
-@import '@fontsource-variable/figtree/wght.css';
-@import '@fontsource-variable/fredoka/wght.css';
-@import '@fontsource/big-shoulders-display/latin-900.css';
 
 /* ============ Tokens ============ */
 :root {
@@ -12,6 +9,10 @@
   --coral-deep: #e8444f;
   --coral-soft: #ffe3e5;
   --white: #ffffff;
+  /* exact studio backdrops baked into the photos (cards holding a photo use these to stay seamless) */
+  --photo-blue: #01258f;
+  --photo-coral: #fb5860;
+  --photo-grey: #cfcfcf;
 
   /* Neutrals (photo backdrop greys, slightly cool) */
   --paper: #f4f5f8;
