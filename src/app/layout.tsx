@@ -3,7 +3,7 @@ import { Big_Shoulders, Fredoka, Figtree } from 'next/font/google';
 import MotionProvider from '@/components/motion/MotionProvider';
 import './globals.css';
 
-const display = Big_Shoulders({ subsets: ['latin'], weight: '900', variable: '--nf-display', display: 'swap' });
+const display = Big_Shoulders({ subsets: ['latin'], weight: '900', variable: '--nf-display', display: 'swap', adjustFontFallback: false });
 const logo = Fredoka({ subsets: ['latin'], weight: '700', variable: '--nf-logo', display: 'swap' });
 const body = Figtree({ subsets: ['latin'], variable: '--nf-body', display: 'swap' });
 
