@@ -1,0 +1,136 @@
+---
+import { Picture } from 'astro:assets';
+import dog from '../assets/img/cta-peek-dog.webp';
+---
+<section id="contato" class="cta" aria-labelledby="cta-title">
+  <div class="cta__card">
+    <div class="cta__main">
+      <h2 id="cta-title" class="display cta__title" data-split>Bora marcar uma visita?</h2>
+      <p class="cta__lead" data-reveal="up">
+        Passe aqui para conhecer o espaço, apresentar o seu bichinho e tirar as dúvidas com a equipe. A primeira conversa é por nossa conta.
+      </p>
+
+      <div class="cta__actions" data-reveal="up">
+        <a class="btn cta__wa" href="https://wa.me/5511900000000" target="_blank" rel="noopener" data-magnetic>Agendar pelo WhatsApp</a>
+        <a class="btn btn--ghost" href="tel:+551130000000">Ligar (11) 3000-0000</a>
+
+        <svg class="cta__arrow" viewBox="0 0 100 66" fill="none" aria-hidden="true" data-draw>
+          <path d="M94 60C70 64 30 58 20 12" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none" />
+          <path d="M7 25L20 9L34 22" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="cta__panel" data-reveal="scale">
+      <div class="cta__photo" data-cta-photo>
+        <Picture
+          src={dog}
+          formats={['avif', 'webp']} fallbackFormat="webp"
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 900px) 40vw, 90vw"
+          alt="Cachorro jack russell sorridindo de língua para fora, espiando por cima de uma beirada"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+
+    <dl class="cta__info" data-stagger>
+      <div data-reveal="up">
+        <dt>Endereço</dt>
+        <dd>Rua dos Pinheiros, 1200<br />Pinheiros, São Paulo</dd>
+      </div>
+      <div data-reveal="up">
+        <dt>Horário</dt>
+        <dd>Seg a Sáb, 8h–20h<br />Emergência 24h</dd>
+      </div>
+      <div data-reveal="up">
+        <dt>Contato</dt>
+        <dd><a href="mailto:oi@bigode.vet">oi@bigode.vet</a></dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .cta { background: var(--white); padding: clamp(2rem, 5vw, 5rem) var(--gutter) var(--gutter); }
+
+  .cta__card {
+    width: min(100%, calc(var(--max) + 2 * var(--gutter)));
+    margin-inline: auto;
+    display: grid; gap: clamp(2rem, 4vw, 3rem);
+    padding: clamp(1.5rem, 4vw, 4rem);
+    background: var(--blue); color: var(--white);
+    border-radius: var(--radius-l);
+    overflow: clip;
+  }
+  @media (min-width: 900px) {
+    .cta__card { grid-template-columns: minmax(0, 11fr) minmax(0, 9fr); column-gap: clamp(2rem, 5vw, 5rem); }
+  }
+
+  .cta__main { display: flex; flex-direction: column; justify-content: center; }
+  .cta__title { font-size: var(--step-4); color: var(--white); max-width: 9ch; }
+  .cta__lead { margin-top: 1.5rem; max-width: 46ch; color: rgb(255 255 255 / 0.85); }
+
+  .cta__actions { position: relative; display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: clamp(1.75rem, 3vw, 2.5rem); }
+  .cta__actions .btn { min-height: 52px; justify-content: center; }
+  /* white on coral is 2.9:1, so the CTA uses ink text (6.3:1) */
+  .cta__wa { --btn-fg: var(--ink); }
+
+  .cta__arrow {
+    display: none; position: absolute; left: 1.5rem; top: calc(100% + 0.5rem);
+    width: 92px; height: auto; color: var(--coral); pointer-events: none;
+  }
+  @media (min-width: 640px) {
+    .cta__actions { margin-bottom: 3.5rem; }
+    .cta__arrow { display: block; }
+  }
+
+  /* Panel matches the photo backdrop (#bbbbbb) so the dog's studio grey melts into it */
+  .cta__panel {
+    position: relative; overflow: clip;
+    min-height: 320px; aspect-ratio: 5 / 4;
+    background: #bbbbbb; border-radius: var(--radius-m);
+  }
+  @media (min-width: 900px) {
+    .cta__panel { aspect-ratio: auto; min-height: 420px; }
+  }
+  .cta__photo { position: absolute; inset: 0; will-change: transform; }
+  .cta__photo :global(picture) { display: block; width: 100%; height: 100%; }
+  .cta__photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+
+  .cta__info {
+    grid-column: 1 / -1;
+    display: grid; gap: 1.5rem 2rem; padding: 0;
+    padding-top: clamp(1.5rem, 3vw, 2.25rem);
+    border-top: 1px solid rgb(255 255 255 / 0.25);
+  }
+  @media (min-width: 720px) {
+    .cta__info { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  .cta__info dt { font-weight: 800; color: var(--white); }
+  .cta__info dd { margin: 0.35rem 0 0; color: rgb(255 255 255 / 0.8); }
+  .cta__info a { color: inherit; text-decoration-color: var(--coral); }
+  .cta__info a:hover { color: var(--white); }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, reduced } from '../scripts/motion';
+
+  if (!reduced) {
+    const photo = document.querySelector<HTMLElement>('[data-cta-photo]');
+    if (photo) {
+      // dog peeks up from behind the panel's bottom edge as the section scrolls in
+      gsap.fromTo(
+        photo,
+        { yPercent: 35 },
+        {
+          yPercent: 0,
+          ease: 'none',
+          scrollTrigger: { trigger: photo.parentElement, start: 'top 92%', end: 'top 35%', scrub: 0.5 },
+        },
+      );
+      ScrollTrigger.refresh();
+    }
+  }
+</script>
