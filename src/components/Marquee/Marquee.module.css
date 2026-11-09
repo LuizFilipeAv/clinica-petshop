@@ -1,0 +1,61 @@
+/* Outer wrapper clips the rotated, 110vw band so the page never scrolls sideways.
+   Vertical padding leaves room for the rotated corners. */
+.marquee {
+  position: relative;
+  overflow: clip;
+  padding-block: 2.5rem;
+}
+
+.band {
+  width: 110vw;
+  margin-left: -5vw;
+  transform: rotate(-2deg);
+  background: var(--blue);
+  color: var(--white);
+  padding-block: 0.22em;
+  overflow: clip;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+  will-change: transform;
+}
+.reverse { animation-direction: reverse; }
+.band:hover .track { animation-play-state: paused; }
+
+.group { display: flex; flex: none; }
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding-inline: 0.45em;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.paw {
+  flex: none;
+  width: 0.6em;
+  height: 0.6em;
+  fill: var(--coral);
+}
+
+.coral .band { background: var(--coral); color: var(--blue); }
+.coral .paw { fill: var(--blue); }
+
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; }
+}
