@@ -1,59 +1,69 @@
-# Convenções do projeto (leia antes de criar um componente)
+# Convenções do projeto: Next.js (branch `front-react`)
 
-Projeto: site conceitual da **Bigode**, uma clínica veterinária & petshop fictícia (São Paulo). É uma peça de portfólio: precisa ser bonito, reativo e **leve**.
-Stack: Astro 5 (saída estática), CSS escopado em `<style>` dentro de cada `.astro`, TypeScript. Sem frameworks de UI e sem Tailwind.
+O projeto é o site conceitual da **Bigode**, uma clínica veterinária & petshop fictícia (São Paulo), feito como peça de portfólio. Precisa ser bonito, reativo e **leve**.
+
+**Stack:** Next.js 16 (App Router), React 19, TypeScript strict, CSS Modules, GSAP 3 + ScrollTrigger + `@gsap/react`, Lenis. Não usamos Tailwind nem biblioteca de UI.
+
+A versão anterior em Astro está na branch `front-antigo`. Leia o original de uma seção com:
+`git show front-antigo:src/components/<Nome>.astro`
+Ao portar, mantenha **o mesmo visual, copy, markup semântico e motion**. Só muda a forma (JSX + CSS Module + hooks).
 
 ## Arquivos que você NÃO edita
-`src/styles/global.css`, `src/scripts/motion.ts`, `src/layouts/Base.astro`, `src/pages/index.astro`, `package.json`. Crie apenas os componentes pedidos em `src/components/`. Não faça commit nem rode `npm install`, `astro dev` ou `astro build`. Quem integra e verifica é o orquestrador.
+`src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/lib/motion.ts`, `src/components/motion/*`, `package.json`, `next.config.ts`.
+Crie **apenas** os componentes pedidos, cada um como `src/components/<Nome>/<Nome>.tsx` + `src/components/<Nome>/<Nome>.module.css`.
+Não faça commit e não rode `npm install`, `next dev` ou `next build`. Para checar tipos, pode rodar `npx tsc --noEmit -p .`.
 
-## Tokens (CSS custom properties, já globais)
-- Cores: `--blue #0E359D` (marca), `--blue-deep`, `--blue-soft`, `--coral #FF606A` (destaque/CTA), `--coral-deep`, `--coral-soft`, `--white`, `--paper #f4f5f8`, `--stone`, `--ink #0b1433` (texto), `--ink-soft`.
-- Fontes: `--font-display` (Big Shoulders Display 900, sempre MAIÚSCULAS, para títulos; use a classe `.display`), `--font-body` (Figtree), `--font-logo` (Fredoka, só no logo).
-- Escala tipográfica: `--step--1` até `--step-4`. Display no máximo `--step-4`.
-- Espaço: `--gutter`, `--section` (padding vertical de seção), `--radius-s/m/l`, `--max`. Use `.container` para a largura.
-- Motion: `--ease-out` (expo, para entradas), `--ease-back` (overshoot leve, para micro-interações), `--ease-in-out`, `--dur-fast 180ms`, `--dur 320ms`, `--dur-slow 700ms`.
-- Sombras: `--shadow-soft`, `--shadow-lift`.
-- Botões: `.btn` (coral), `.btn--blue`, `.btn--ghost`. Para seta: `<span class="btn__arrow"><svg viewBox="0 0 10 10"><path d="M0 5.6h7.6L4.1 9.1 5 10l5-5-5-5-.9.9 3.5 3.5H0z" fill="currentColor"/></svg></span>`.
+## Server vs client
+- O padrão é **Server Component** (sem `'use client'`).
+- Use `'use client'` só quando o componente tiver estado, efeitos ou listeners (carrossel, tabs, accordion, ScrollTrigger).
+- Se só um pedaço é interativo, extraia esse pedaço num subcomponente client e deixe o resto server.
 
-## Motion: use atributos, não escreva JS de animação
-O `motion.ts` global já trata estes atributos:
-- `data-reveal="up|fade|scale|clip"`: entrada única quando o elemento entra na tela. `clip` serve para imagens (abre de um retângulo menor).
-- `data-stagger` no pai: os filhos com `data-reveal` entram em sequência (o índice vai para `--i`).
-- `data-split` num título: as palavras sobem por baixo de uma máscara.
-- `data-draw` num `<svg>` (ou `<path>`): traço desenhado à mão que se desenha ao aparecer. O path precisa de `stroke`, `fill="none"` e `stroke-linecap="round"`.
-- `data-parallax="0.1"`: drift vertical conforme o scroll. Use pouco, em imagens.
-- `data-count="1200"` com `data-suffix="+"` opcional: número que conta.
-- `data-magnetic`: botão que segue levemente o ponteiro.
-- `data-cursor="Arraste"`: o cursor customizado mostra esse texto no hover.
+## Tokens globais (CSS custom properties em `globals.css`)
+- **Cores:** `--blue #0E359D`, `--blue-deep`, `--blue-soft`, `--coral #FF606A`, `--coral-deep`, `--coral-soft`, `--white`, `--paper`, `--stone`, `--ink`, `--ink-soft`.
+- **Fundos das fotos:** os cards que recebem foto usam `--photo-blue #01258f`, `--photo-coral #fb5860` e `--photo-grey #cfcfcf`, que são as cores exatas do fundo de estúdio das imagens. Assim não aparece emenda.
+- **Fontes:** `--font-display` (Big Shoulders 900, use a classe global `display`), `--font-body`, `--font-logo`.
+- **Escala:** `--step--1` até `--step-4`, `--gutter`, `--section`, `--radius-s/m/l`, `--max`.
+- **Motion:** `--ease-out`, `--ease-back`, `--ease-in-out`, `--dur-fast`, `--dur`, `--dur-slow`. Sombras: `--shadow-soft`, `--shadow-lift`.
+- **Classes globais:** `container`, `display`, `visually-hidden`, `btn`, `btn--blue`, `btn--ghost` e `btn__arrow`. Classes globais vão em `className` como string comum, por exemplo `className={`btn ${styles.cta}`}`.
 
-Só escreva `<script>` se a interação for própria do componente (ex.: carrossel com arraste). Nesse caso:
-- use `import { gsap } from 'gsap'` se precisar;
-- anime apenas `transform`, `opacity` e `clip-path`;
-- use `pointer events` e listeners `passive` quando possível;
-- respeite `matchMedia('(prefers-reduced-motion: reduce)')`;
-- não crie loops de rAF que rodem para sempre.
+## Motion: atributos declarativos (o runtime global trata)
+- `data-reveal="up|fade|scale|clip"`: entrada única quando o elemento aparece na tela.
+- `data-stagger` no pai: os filhos com `data-reveal` entram em sequência.
+- `data-draw` em `<svg>` ou `<path>`: traço desenhado à mão. O path precisa de `stroke`, `fill="none"` e `strokeLinecap="round"`.
+- `data-parallax="0.1"`, `data-count="1200"` (+ `data-suffix="+"`), `data-magnetic` e `data-cursor="Arraste"`.
+- **Títulos com palavras subindo:** use `import SplitText from '@/components/motion/SplitText'` e escreva `<SplitText as="h2" id="x" className="display ...">Texto <em>destaque</em></SplitText>`. Não use `data-split` direto.
+- O runtime marca o elemento visível com o atributo `data-inview`. **Nunca** remova nem controle esse atributo pelo React.
 
-Hover e estados em CSS: `transition` com os tokens. Nada de `transition: all`.
+## GSAP no React
+```tsx
+'use client';
+import { useRef } from 'react';
+import { gsap, ScrollTrigger, useGSAP, prefersReduced } from '@/lib/motion';
+
+const root = useRef<HTMLElement>(null);
+useGSAP(() => {
+  if (prefersReduced()) return;
+  gsap.fromTo('.x', {...}, { scrollTrigger: { trigger: root.current, scrub: true } });
+}, { scope: root });
+```
+- `useGSAP` faz o cleanup automaticamente. Use `scope` e seletores relativos, ou refs.
+- Anime só `transform`, `opacity` e `clip-path`.
+- Listeners em `useEffect`, sempre com cleanup. Nada de rAF infinito.
+- Respeite `prefersReduced()`.
 
 ## Imagens
-Fotos em `src/assets/img/*.webp`. Use sempre o componente otimizado:
-```astro
----
-import { Picture } from 'astro:assets';
-import vet from '../assets/img/about-vet.webp';
----
-<Picture src={vet} formats={['avif', 'webp']} widths={[400, 800, 1200]} sizes="(min-width: 900px) 40vw, 90vw" alt="Descrição real em português" loading="lazy" />
+```tsx
+import Image from 'next/image';
+import vet from '@/assets/img/about-vet.webp';
+<Image src={vet} alt="Descrição real em português" sizes="(min-width: 900px) 40vw, 90vw" />
 ```
-Todas as fotos estão em P&B com um detalhe colorido. As de serviço têm fundo sólido azul ou coral.
+- O import estático já fornece largura, altura e blur. O Next gera AVIF/WebP responsivos.
+- Use `priority` só no hero.
+- Para ocupar o pai, use `fill` com o pai em `position: relative`, ou CSS (`width: 100%; height: auto`).
+- Para estilizar o `<img>`, use `className` no `Image`.
 
 ## Regras de design (obrigatórias)
-- **Nada de "eyebrow"/kicker** (o rótulo pequeno em cima do título). O título fala sozinho.
-- Nada de texto em gradiente, glassmorphism decorativo, `border-left` colorido em cards, sombras duras (`4px 4px 0`), emoji ou caracteres unicode no lugar de ícones. Ícones são SVG desenhados, com traço consistente.
-- Evite grade de cards todos iguais (ícone + título + texto). Varie tamanho e ritmo.
-- Nada de numeração de seção (01/02/03).
-- Contraste: texto ≥ 4.5:1. Texto secundário sobre fundo colorido usa tom derivado da cor (ex.: branco com opacidade sobre azul), nunca cinza.
-- Mais espaço acima de um título do que abaixo. Corpo de texto com no máximo 65ch.
-- Responsivo de 360px até 1600px, sem scroll horizontal. Mobile first.
-- Estados: hover, `:focus-visible` (já global) e `:active`. Alvos de toque ≥ 44px.
-- HTML semântico (`section` com `aria-labelledby`, `h2`, listas). `alt` descritivo em português.
-- Copy em **português do Brasil**, tom caloroso, leve e confiante, sem clichês de marketing. Dados de contato fictícios.
+- Nada de eyebrow/kicker acima do título, texto em gradiente, glassmorphism decorativo, `border-left` colorido, sombras duras ou emoji/unicode no lugar de ícones. Ícones são SVG.
+- Contraste ≥ 4.5:1 em texto. Branco sobre coral **não passa**: use `--ink`, `--blue-deep` ou um coral mais escuro.
+- Responsivo de 360 a 1600px, sem scroll horizontal. Alvos de toque ≥ 44px. `:focus-visible` já é global.
+- HTML semântico, `alt` em português, copy em pt-BR.
