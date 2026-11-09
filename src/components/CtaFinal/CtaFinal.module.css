@@ -1,0 +1,58 @@
+.cta { background: var(--white); padding: clamp(2rem, 5vw, 5rem) var(--gutter) var(--gutter); }
+
+.card {
+  width: min(100%, calc(var(--max) + 2 * var(--gutter)));
+  margin-inline: auto;
+  display: grid; gap: clamp(2rem, 4vw, 3rem);
+  padding: clamp(1.5rem, 4vw, 4rem);
+  background: var(--blue); color: var(--white);
+  border-radius: var(--radius-l);
+  overflow: clip;
+}
+@media (min-width: 900px) {
+  .card { grid-template-columns: minmax(0, 11fr) minmax(0, 9fr); column-gap: clamp(2rem, 5vw, 5rem); }
+}
+
+.main { display: flex; flex-direction: column; justify-content: center; }
+.title { font-size: var(--step-4); color: var(--white); max-width: 9ch; }
+.lead { margin-top: 1.5rem; max-width: 46ch; color: rgb(255 255 255 / 0.85); }
+
+.actions { position: relative; display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: clamp(1.75rem, 3vw, 2.5rem); }
+.actions :global(.btn) { min-height: 52px; justify-content: center; }
+/* white on coral is 2.9:1, so the CTA uses ink text (6.3:1) */
+.wa { --btn-fg: var(--ink); }
+
+.arrow {
+  display: none; position: absolute; left: 1.5rem; top: calc(100% + 0.5rem);
+  width: 92px; height: auto; color: var(--coral); pointer-events: none;
+}
+@media (min-width: 640px) {
+  .actions { margin-bottom: 3.5rem; }
+  .arrow { display: block; }
+}
+
+/* Panel matches the photo backdrop (#bbbbbb) so the dog's studio grey melts into it */
+.panel {
+  position: relative; overflow: clip;
+  min-height: 320px; aspect-ratio: 5 / 4;
+  background: #bbbbbb; border-radius: var(--radius-m);
+}
+@media (min-width: 900px) {
+  .panel { aspect-ratio: auto; min-height: 420px; }
+}
+.photo { position: absolute; inset: 0; will-change: transform; }
+.img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+
+.info {
+  grid-column: 1 / -1;
+  display: grid; gap: 1.5rem 2rem; padding: 0;
+  padding-top: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 1px solid rgb(255 255 255 / 0.25);
+}
+@media (min-width: 720px) {
+  .info { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.info dt { font-weight: 800; color: var(--white); }
+.info dd { margin: 0.35rem 0 0; color: rgb(255 255 255 / 0.8); }
+.info a { color: inherit; text-decoration-color: var(--coral); }
+.info a:hover { color: var(--white); }
