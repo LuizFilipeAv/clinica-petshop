@@ -1,0 +1,25 @@
+# Skills / agentes do Claude (instalados localmente, não versionar)
+.claude/skills/
+.claude/agents/
+.claude/worktrees/
+.claude/settings.local.json
+
+# Dependências e build
+node_modules/
+dist/
+build/
+.next/
+.astro/
+.vercel/
+
+# Ambiente
+.env
+.env.*
+!.env.example
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/*
+!.vscode/extensions.json
