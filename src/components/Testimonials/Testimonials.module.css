@@ -1,0 +1,64 @@
+.testi { background: var(--coral); color: var(--ink); padding-block: var(--section); overflow-x: clip; }
+
+.grid { display: grid; gap: clamp(2.5rem, 6vw, 4rem); }
+@media (min-width: 960px) {
+  .grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; gap: clamp(3rem, 6vw, 6rem); }
+}
+
+/* blue-deep on coral = 4.7:1; white is decorative only (mark, avatar ring) */
+.title { font-size: var(--step-4); color: var(--blue-deep); max-width: 10ch; }
+
+.stage { position: relative; padding-top: clamp(2.75rem, 5vw, 4rem); }
+.mark {
+  position: absolute; top: 0; left: 0; width: clamp(40px, 5vw, 60px); height: auto;
+  color: var(--white);
+}
+
+.panels { display: grid; }
+.panel {
+  grid-area: 1 / 1;
+  opacity: 0; visibility: hidden; transform: translate3d(0, 12px, 0);
+  transition: opacity 350ms var(--ease-out), transform 350ms var(--ease-out), visibility 0s linear 350ms;
+}
+.panel.is-active {
+  opacity: 1; visibility: visible; transform: none;
+  transition-delay: 0s, 0s, 0s;
+}
+
+.stars { width: 120px; height: 24px; color: var(--blue-deep); }
+.quote {
+  margin-top: 1.25rem; max-width: 26em;
+  font-size: var(--step-2); font-weight: 700; line-height: 1.22; letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.who { margin-top: 1.5rem; font-size: var(--step-0); }
+.who strong { font-weight: 800; }
+
+.tabs { display: flex; gap: clamp(0.75rem, 2.5vw, 1.5rem); margin-top: clamp(2rem, 4vw, 3rem); }
+.tab {
+  display: grid; justify-items: center; gap: 0.5rem; min-width: 64px; padding: 0.35rem 0.25rem;
+  border-radius: var(--radius-s);
+}
+.avatar {
+  display: block; width: 64px; height: 64px; border-radius: 50%; overflow: clip;
+  background: #bbbbbb;
+  box-shadow: 0 0 0 0 var(--white);
+  transform: scale(0.86);
+  transition: transform var(--dur) var(--ease-back), box-shadow var(--dur) var(--ease-out), opacity var(--dur-fast) linear;
+  opacity: 0.8;
+}
+.avatarImg { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.tab:hover .avatar { opacity: 1; transform: scale(0.95); }
+.tab[aria-selected='true'] .avatar {
+  opacity: 1; transform: scale(1.22);
+  box-shadow: 0 0 0 4px var(--white);
+}
+.tab:active .avatar { transform: scale(0.9); }
+.tab[aria-selected='true']:active .avatar { transform: scale(1.12); }
+
+.name { font-size: var(--step--1); font-weight: 700; margin-top: 0.3rem; }
+.tab[aria-selected='true'] .name { font-weight: 800; }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel { transform: none; }
+}

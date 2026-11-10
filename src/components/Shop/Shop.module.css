@@ -1,0 +1,97 @@
+.shop { background: var(--paper); padding-block: var(--section); overflow-x: clip; }
+
+.head {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+  gap: 1.5rem 2rem; margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+.title { font-size: var(--step-3); color: var(--blue); max-width: 15ch; }
+
+.nav { display: flex; gap: 0.75rem; }
+.arrow {
+  display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+  background: var(--blue); color: var(--white);
+  transition: transform var(--dur) var(--ease-back), background-color var(--dur-fast) linear, opacity var(--dur-fast) linear;
+}
+.arrow svg { width: 18px; height: 18px; }
+.arrowPrev svg { transform: rotate(180deg); }
+.arrow:hover { background: var(--blue-deep); transform: scale(1.08); }
+.arrow:active { transform: scale(0.92); }
+.arrow[aria-disabled='true'] { opacity: 0.35; cursor: default; transform: none; background: var(--blue); }
+
+/* Native horizontal scroll + snap; scrollbar hidden visually, the region stays focusable. */
+.track {
+  --pad: max(var(--gutter), calc((100% - var(--max)) / 2));
+  position: relative;
+  overflow-x: auto; overflow-y: hidden;
+  padding: 0.5rem var(--pad) 3rem;
+  scroll-padding-inline: var(--pad);
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.track::-webkit-scrollbar { display: none; }
+.track.is-dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+@media (hover: hover) and (pointer: fine) {
+  .track { cursor: grab; }
+}
+
+.list {
+  display: flex; align-items: flex-start; gap: clamp(1rem, 2vw, 1.75rem);
+  width: max-content; padding: 0; list-style: none;
+}
+
+.card {
+  flex: 0 0 clamp(240px, 72vw, 330px);
+  scroll-snap-align: start;
+  transition: opacity var(--dur) linear;
+}
+.card:nth-child(even) { margin-top: clamp(1.25rem, 3vw, 2.75rem); }
+.card.is-peek { opacity: 0.5; }
+
+.media {
+  aspect-ratio: 1;
+  background: var(--bg);
+  border-radius: var(--radius-m);
+  overflow: clip;
+  display: grid; place-items: center;
+}
+.img {
+  width: 100%; height: auto; max-height: 100%; object-fit: contain;
+  pointer-events: none; -webkit-user-drag: none; user-select: none;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.card:hover .img { transform: scale(1.05); }
+
+.info {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  margin-top: 1rem; padding-inline: 0.25rem;
+}
+.name { font-family: var(--font-body); font-size: var(--step-1); font-weight: 800; line-height: 1.15; color: var(--ink); }
+.price { margin-top: 0.2rem; font-weight: 600; color: var(--ink-soft); }
+
+.add {
+  flex: none; position: relative; display: grid; place-items: center;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--coral); color: var(--ink);
+  transition: transform var(--dur) var(--ease-back), background-color var(--dur-fast) linear;
+}
+.add svg { width: 24px; height: 24px; overflow: visible; }
+.add:hover { background: var(--coral-deep); transform: scale(1.08); }
+.add:active { transform: scale(0.9); }
+.add.is-added { transform: scale(1.18); }
+
+.plus {
+  transform-box: fill-box; transform-origin: center;
+  transition: transform var(--dur) var(--ease-back), opacity var(--dur-fast) linear;
+}
+.check {
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--dur) var(--ease-out);
+}
+.add.is-added .plus { transform: rotate(90deg) scale(0.3); opacity: 0; }
+.add.is-added .check { stroke-dashoffset: 0; transition-delay: 90ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover .img { transform: none; }
+}
